@@ -227,22 +227,22 @@ const Patients = () => {
     first_name: "",
     last_name: "",
     middle_initial: "",
-    date_of_birth: "",
-    email: "",
-    address: "",
-    city: "",
-    state: "",
-    zip_code: "",
-    phone_number: "",
-    primary_insurance: "",
-    primary_insurance_number: "",
-    secondary_insurance: "",
-    secondary_insurance_number: "",
-    tertiary_insurance: "",
-    tertiary_insurance_number: "",
-    medical_record_number: "",
-    wound_size_length: "",
-    wound_size_width: "",
+    // date_of_birth: "",
+    // email: "",
+    // address: "",
+    // city: "",
+    // state: "",
+    // zip_code: "",
+    // phone_number: "",
+    // primary_insurance: "",
+    // primary_insurance_number: "",
+    // secondary_insurance: "",
+    // secondary_insurance_number: "",
+    // tertiary_insurance: "",
+    // tertiary_insurance_number: "",
+    // medical_record_number: "",
+    // wound_size_length: "",
+    // wound_size_width: "",
   };
 
   const [formData, setFormData] = useState(initialFormState);
@@ -273,16 +273,16 @@ const Patients = () => {
       newErrors.last_name = "Last name is required";
     }
     
-    if (!formData.date_of_birth) {
-      newErrors.date_of_birth = "Date of birth is required";
-    }
+    // if (!formData.date_of_birth) {
+    //   newErrors.date_of_birth = "Date of birth is required";
+    // }
     
-    if (formData.phone_number) {
-      const digitsOnly = formData.phone_number.replace(/\D/g, "");
-      if (digitsOnly.length !== 10) {
-        newErrors.phone_number = "Phone number must be 10 digits (US format)";
-      }
-    }
+    // if (formData.phone_number) {
+    //   const digitsOnly = formData.phone_number.replace(/\D/g, "");
+    //   if (digitsOnly.length !== 10) {
+    //     newErrors.phone_number = "Phone number must be 10 digits (US format)";
+    //   }
+    // }
     
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
@@ -377,13 +377,19 @@ const Patients = () => {
     }
 
     // ✅ FIX: Exclude read-only timestamp fields from the payload
-    const { created_at, updated_at, date_created, date_updated, ...cleanFormData } = formData;
+    // const { created_at, updated_at, date_created, date_updated, ...cleanFormData } = formData;
     
+    // const patientData = {
+    //   ...cleanFormData,
+    //   // Ensure phone number is formatted correctly before saving
+    //   phone_number: formatPhoneNumberToE164(formData.phone_number || cleanFormData.phone_number),
+    // };
+
     const patientData = {
-      ...cleanFormData,
-      // Ensure phone number is formatted correctly before saving
-      phone_number: formatPhoneNumberToE164(formData.phone_number || cleanFormData.phone_number),
-    };
+    first_name: formData.first_name,
+    last_name: formData.last_name,
+    middle_initial: formData.middle_initial || "",
+  };
 
     try {
       // 1. Set component state to reflect loading

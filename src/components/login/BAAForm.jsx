@@ -3,15 +3,25 @@ import logo from '../../assets/images/logo.png';
 import BAAAgreementText from './BAAAgreementText';
 import { toast } from 'react-hot-toast';
 
+// Helper function to capitalize text (Title Case)
+const toTitleCase = (str) => {
+  if (!str) return '';
+  return str
+    .toLowerCase()
+    .split(' ')
+    .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+    .join(' ');
+};
+
 const BAAForm = ({ onAgreementAccepted, userData }) => {
   const [formData, setFormData] = useState({
     effectiveDate: '',
     providerCompanyName: '',
-    monthlyVolume: '',
+    monthlyVolume: 0,
     signatoryName: '',
     signatoryTitle: '',
     signature: '',
-    signatureDate: '',
+    // signatureDate: '',
   });
 
   const [agreed, setAgreed] = useState(false);
@@ -23,14 +33,14 @@ const BAAForm = ({ onAgreementAccepted, userData }) => {
 
     setFormData({
       effectiveDate: today,
-      signatureDate: today,
-      providerCompanyName: userData?.facility || '',
-      signatoryName: userData?.full_name || '',
-      signatoryTitle: userData?.title || '',
-      monthlyVolume: '',
+      // signatureDate: today,
+      providerCompanyName: toTitleCase(userData?.facility) || '',
+      signatoryName: toTitleCase(userData?.full_name) || '',
+      signatoryTitle: 'Dr.',
+      monthlyVolume: 0,
       signature: '',
     });
-  }, []); // ✅ Empty array - only runs once
+  }, [userData]); // ✅ Empty array - only runs once
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -79,8 +89,8 @@ const BAAForm = ({ onAgreementAccepted, userData }) => {
     }
 
     const requiredFields = [
-      'monthlyVolume', 'providerCompanyName', 'effectiveDate',
-      'signatoryName', 'signatoryTitle', 'signature', 'signatureDate'
+       'providerCompanyName', 'effectiveDate',
+      'signatoryName', 'signatoryTitle', 'signature'
     ];
 
     const isFormValid = requiredFields.every(field => 
@@ -97,13 +107,13 @@ const BAAForm = ({ onAgreementAccepted, userData }) => {
 
     // ✅ Convert camelCase to snake_case for backend
     const backendFormData = {
-      monthly_volume: formData.monthlyVolume,
+      monthly_volume: 0,
       provider_company_name: formData.providerCompanyName,
       effective_date: formData.effectiveDate,
       signatory_name: formData.signatoryName,
       signatory_title: formData.signatoryTitle,
       signature: formData.signature,
-      signature_date: formData.signatureDate,
+      signature_date: formData.effectiveDate,
     };
 
     onAgreementAccepted(backendFormData)
@@ -139,7 +149,7 @@ const BAAForm = ({ onAgreementAccepted, userData }) => {
             <h3 className="text-lg font-bold text-gray-800 text-center">Agreement Execution</h3>
 
             {/* Monthly Volume */}
-            <div className="flex flex-col md:flex-row md:items-center py-2">
+            {/* <div className="flex flex-col md:flex-row md:items-center py-2">
               <label htmlFor="monthlyVolume" className="w-full md:w-1/3 text-sm font-medium text-gray-700">
                 Anticipated Average Monthly Volume
               </label>
@@ -154,7 +164,7 @@ const BAAForm = ({ onAgreementAccepted, userData }) => {
                   className="mt-1 block w-full border-b border-gray-300 py-1 focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm bg-white text-gray-900"
                 />
               </div>
-            </div>
+            </div> */}
 
             {/* Provider Company Name */}
             <div className="flex flex-col md:flex-row md:items-center py-2">
@@ -168,9 +178,10 @@ const BAAForm = ({ onAgreementAccepted, userData }) => {
                   type="text"
                   value={formData.providerCompanyName}
                   onChange={handleChange}
+                  readOnly
                   required
-                  className="mt-1 block w-full border-b border-gray-300 py-1 focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm bg-white text-gray-900"
-                />
+                  className="mt-1 block w-full border-b border-gray-300 py-1 focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm bg-gray-100 text-gray-500 cursor-not-allowed"
+               />
               </div>
             </div>
 
@@ -205,8 +216,9 @@ const BAAForm = ({ onAgreementAccepted, userData }) => {
                   type="text"
                   value={formData.signatoryName}
                   onChange={handleChange}
+                  readOnly
                   required
-                  className="mt-1 block w-full border-b border-gray-300 py-1 focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm bg-white text-gray-900"
+                  className="mt-1 block w-full border-b border-gray-300 py-1 sm:text-sm bg-gray-100 text-gray-500 cursor-not-allowed"
                 />
               </div>
             </div>
@@ -223,8 +235,9 @@ const BAAForm = ({ onAgreementAccepted, userData }) => {
                   type="text"
                   value={formData.signatoryTitle}
                   onChange={handleChange}
+                  readOnly
                   required
-                  className="mt-1 block w-full border-b border-gray-300 py-1 focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm bg-white text-gray-900"
+                  className="mt-1 block w-full border-b border-gray-300 py-1 sm:text-sm bg-gray-100 text-gray-500 cursor-not-allowed"
                 />
               </div>
             </div>
@@ -248,7 +261,7 @@ const BAAForm = ({ onAgreementAccepted, userData }) => {
             </div>
 
             {/* Signature Date (Read-only) */}
-            <div className="flex flex-col md:flex-row md:items-center py-2">
+            {/* <div className="flex flex-col md:flex-row md:items-center py-2">
               <label htmlFor="signatureDate" className="w-full md:w-1/3 text-sm font-medium text-gray-700">
                 Signature Date
               </label>
@@ -264,7 +277,7 @@ const BAAForm = ({ onAgreementAccepted, userData }) => {
                   className="mt-1 block w-full border-b border-gray-300 py-1 focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm bg-gray-100 text-gray-500 cursor-not-allowed"
                 />
               </div>
-            </div>
+            </div> */}
 
             {/* Agreement Checkbox */}
             <div className="flex items-start pt-6 border-t border-gray-200 mt-6">

@@ -161,7 +161,7 @@ const NewPatientForm = ({
           </motion.div>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+        {/* <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           <motion.div variants={formItemVariants} className="md:col-span-1">
             <label
               htmlFor="date_of_birth"
@@ -183,9 +183,9 @@ const NewPatientForm = ({
               required
             />
             {renderError("date_of_birth")}
-          </motion.div>
+          </motion.div> */}
 
-          <motion.div variants={formItemVariants} className="md:col-span-1">
+          {/* <motion.div variants={formItemVariants} className="md:col-span-1">
             <label
               htmlFor="phone_number"
               className="block mb-1 text-sm font-medium text-gray-700 dark:text-gray-300"
@@ -206,9 +206,9 @@ const NewPatientForm = ({
               } rounded-lg focus:border-teal-500 focus:ring-teal-500 focus:outline-none transition`}
             />
             {renderError("phone_number")}
-          </motion.div>
+          </motion.div> */}
 
-          <motion.div variants={formItemVariants} className="md:col-span-1">
+          {/* <motion.div variants={formItemVariants} className="md:col-span-1">
             <label
               htmlFor="email"
               className="block mb-1 text-sm font-medium text-gray-700 dark:text-gray-300"
@@ -225,9 +225,9 @@ const NewPatientForm = ({
               className="block w-full px-3 py-2 text-sm text-gray-800 dark:text-gray-200 bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-lg focus:border-teal-500 focus:ring-teal-500 focus:outline-none transition"
             />
           </motion.div>
-        </div>
+        </div> */}
 
-        <motion.div variants={formItemVariants}>
+        {/* <motion.div variants={formItemVariants}>
           <label
             htmlFor="medical_record_number"
             className="block mb-1 text-sm font-medium text-gray-700 dark:text-gray-300"
@@ -243,10 +243,10 @@ const NewPatientForm = ({
             onChange={handleInputChange}
             className="block w-full px-3 py-2 text-sm text-gray-800 dark:text-gray-200 bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-lg focus:border-teal-500 focus:ring-teal-500 focus:outline-none transition"
           />
-        </motion.div>
+        </motion.div> */}
 
         {/* === ADDRESS DETAILS === */}
-        <h4 className="text-lg font-semibold text-teal-600 dark:text-teal-400 border-b border-teal-600/50 pb-1 pt-4">
+        {/* <h4 className="text-lg font-semibold text-teal-600 dark:text-teal-400 border-b border-teal-600/50 pb-1 pt-4">
           Address Details
         </h4>
 
@@ -327,10 +327,10 @@ const NewPatientForm = ({
               className="block w-full px-3 py-2 text-sm text-gray-800 dark:text-gray-200 bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-lg focus:border-teal-500 focus:ring-teal-500 focus:outline-none transition"
             />
           </motion.div>
-        </div>
+        </div> */}
 
         {/* === INSURANCE INFORMATION === */}
-        <h4 className="text-lg font-semibold text-teal-600 dark:text-teal-400 border-b border-teal-600/50 pb-1 pt-4">
+        {/* <h4 className="text-lg font-semibold text-teal-600 dark:text-teal-400 border-b border-teal-600/50 pb-1 pt-4">
           Insurance Information
         </h4>
 
@@ -443,16 +443,16 @@ const NewPatientForm = ({
               className="block w-full px-3 py-2 text-sm text-gray-800 dark:text-gray-200 bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-lg focus:border-teal-500 focus:ring-teal-500 focus:outline-none transition"
             />
           </motion.div>
-        </div>
+        </div> */}
 
         {/* === WOUND INFORMATION === */}
-        <h4 className="text-lg font-semibold text-teal-600 dark:text-teal-400 border-b border-teal-600/50 pb-1 pt-4">
+        {/* <h4 className="text-lg font-semibold text-teal-600 dark:text-teal-400 border-b border-teal-600/50 pb-1 pt-4">
           Wound Information
         </h4>
         
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4"> */}
           {/* Wound Size Length */}
-          <motion.div variants={formItemVariants}>
+          {/* <motion.div variants={formItemVariants}>
             <label
               htmlFor="wound_size_length"
               className="block mb-1 text-sm font-medium text-gray-700 dark:text-gray-300"
@@ -470,10 +470,10 @@ const NewPatientForm = ({
               onChange={handleInputChange}
               className="block w-full px-3 py-2 text-sm text-gray-800 dark:text-gray-200 bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-lg focus:border-teal-500 focus:ring-teal-500 focus:outline-none transition"
             />
-          </motion.div>
+          </motion.div> */}
 
           {/* Wound Size Width */}
-          <motion.div variants={formItemVariants}>
+          {/* <motion.div variants={formItemVariants}>
             <label
               htmlFor="wound_size_width"
               className="block mb-1 text-sm font-medium text-gray-700 dark:text-gray-300"
@@ -491,10 +491,10 @@ const NewPatientForm = ({
               onChange={handleInputChange}
               className="block w-full px-3 py-2 text-sm text-gray-800 dark:text-gray-200 bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-lg focus:border-teal-500 focus:ring-teal-500 focus:outline-none transition"
             />
-          </motion.div>
+          </motion.div> */}
 
           {/* Wound Size Depth */}
-          <motion.div variants={formItemVariants}>
+          {/* <motion.div variants={formItemVariants}>
             <label
               htmlFor="wound_size_depth"
               className="block mb-1 text-sm font-medium text-gray-700 dark:text-gray-300"
@@ -513,7 +513,7 @@ const NewPatientForm = ({
               className="block w-full px-3 py-2 text-sm text-gray-800 dark:text-gray-200 bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-lg focus:border-teal-500 focus:ring-teal-500 focus:outline-none transition"
             />
           </motion.div>
-        </div>
+        </div> */}
 
         {/* Calculated Wound Metrics */}
         {(calculateSurfaceArea() || calculateVolume()) && (

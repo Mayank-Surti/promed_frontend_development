@@ -1,8 +1,11 @@
-import React, { useContext } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { useNavigate, Navigate } from 'react-router-dom';
 import { AuthContext } from "../../utils/context/auth"; 
 import BAAForm from './BAAForm';
 import { motion } from "framer-motion"; // 1. Import motion
+import axios from 'axios';
+
+const API_BASE_URL = "http://localhost:8000/api/v1";
 
 const containerVariants = {
   hidden: { opacity: 0, scale: 0.95 },
@@ -14,9 +17,60 @@ const containerVariants = {
 };
 
 const BAAAgreementPage = () => {
-  const { signBAA, user, isBAARequired } = useContext(AuthContext);
+  const { signBAA, user, isBAARequired,  } = useContext(AuthContext);
   const navigate = useNavigate();
+  const [profileData, setProfileData] = useState(null); 
+  const [isLoading, setIsLoading] = useState(true);
 
+  useEffect(() => {
+  const fetchProfileData = async () => {
+    // ✅ Get token from localStorage instead of authTokens
+    const accessToken = localStorage.getItem('accessToken');
+    
+    if (!accessToken) {
+      setIsLoading(false);
+      return;
+    }
+
+    try {
+      const response = await axios.get(`${API_BASE_URL}/provider/profile/`, {
+        headers: {
+          Authorization: `Bearer ${accessToken}`
+        }
+      });
+
+      console.log("🔍 Full API Response:", response.data);
+  console.log("🔍 User object:", response.data.user);
+  console.log("🔍 Facility from profile:", response.data.facility);
+  console.log("🔍 Facility from user:", response.data.user?.facility);
+  console.log("🔍 Title from profile:", response.data.title);
+  console.log("🔍 Title from user:", response.data.user?.title);
+      
+      // ✅ Extract user data from nested structure
+      const userData = {
+        full_name: response.data.user?.full_name || '',
+        facility: response.data.facility || '',
+        title: response.data.title || '', // title comes from Profile model
+        email: response.data.user?.email || '',
+      };
+      
+      setProfileData(userData);
+      console.log("✅ Profile data fetched:", userData);
+    } catch (error) {
+      console.error("❌ Failed to fetch profile data:", error);
+      // Even if profile fetch fails, we can still use basic user data
+      setProfileData({
+        full_name: user?.full_name || user?.email || '',
+        facility: user?.facility || '',
+        title: user?.title || '',
+      });
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  fetchProfileData();
+}, [user]); // ✅ Only depend on user, not authTokens
   if (!isBAARequired) {
     if (user) return <Navigate to="/dashboard" replace />;
     return <Navigate to="/login" replace />;
@@ -27,6 +81,14 @@ const BAAAgreementPage = () => {
     if (result.success && result.mfa_required) navigate('/mfa', { replace: true });
     else if (result.success) navigate('/dashboard', { replace: true });
   };
+
+  if (isLoading) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-slate-900 via-blue-900 to-slate-900 flex items-center justify-center">
+        <div className="text-white text-xl">Loading...</div>
+      </div>
+    );
+  }
 
   const prefillData = {
     full_name: user?.full_name || user?.email || '',
@@ -60,7 +122,7 @@ const BAAAgreementPage = () => {
           </p>
           <BAAForm 
             onAgreementAccepted={handleAgreementAccepted} 
-            userData={prefillData}
+            userData={profileData}
           />
         </div>
       </motion.div>

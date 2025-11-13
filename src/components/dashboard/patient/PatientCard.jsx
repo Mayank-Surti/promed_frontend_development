@@ -338,12 +338,12 @@ const PatientCard = ({
                 <h3 className="text-base font-bold text-gray-900 dark:text-gray-100 truncate">
                   {patient.first_name} {patient.last_name}
                 </h3>
-                <p className="text-[10px] text-gray-500 dark:text-gray-400">
+                {/* <p className="text-[10px] text-gray-500 dark:text-gray-400">
                   MRN:{" "}
                   <span className="font-mono font-medium">
                     {patient.medical_record_number}
                   </span>
-                </p>
+                </p> */}
               </div>
             </div>
 
@@ -368,15 +368,15 @@ const PatientCard = ({
             </div>
           </div>
 
-          <div className="mt-2">
+          {/* <div className="mt-2">
             <IVRStatusBadge status={getPatientIvrStatus(patient)} />
-          </div>
+          </div> */}
         </div>
 
         {/* Content */}
         <div className="p-4 space-y-4">
           {/* Contact Information */}
-          <Section title="Contact" icon={IoCallOutline}>
+          {/* <Section title="Contact" icon={IoCallOutline}>
             <div className="space-y-3">
               <InfoRow
                 icon={IoLocationOutline}
@@ -396,13 +396,13 @@ const PatientCard = ({
                 )} yrs)`}
               />
             </div>
-          </Section>
+          </Section> */}
 
           {/* Insurance Information */}
-          <Section title="Insurance" icon={IoShieldCheckmarkOutline}>
-            <div className="space-y-2">
+          {/* <Section title="Insurance" icon={IoShieldCheckmarkOutline}> */}
+            {/* <div className="space-y-2"> */}
               {/* Primary */}
-              <div className="bg-gray-50 dark:bg-gray-700/50 rounded-lg p-2.5">
+              {/* <div className="bg-gray-50 dark:bg-gray-700/50 rounded-lg p-2.5">
                 <div className="flex items-center justify-between mb-1">
                   <span className="text-[10px] font-bold text-gray-700 dark:text-gray-300 uppercase">
                     Primary
@@ -417,10 +417,10 @@ const PatientCard = ({
                 <p className="text-[10px] text-gray-600 dark:text-gray-400 font-mono mt-0.5">
                   {patient.primary_insurance_number}
                 </p>
-              </div>
+              </div> */}
 
               {/* Secondary */}
-              {patient.secondary_insurance && (
+              {/* {patient.secondary_insurance && (
                 <div className="bg-gray-50 dark:bg-gray-700/50 rounded-lg p-2.5">
                   <div className="flex items-center justify-between mb-1">
                     <span className="text-[10px] font-bold text-gray-700 dark:text-gray-300 uppercase">
@@ -437,10 +437,10 @@ const PatientCard = ({
                     {patient.secondary_insurance_number}
                   </p>
                 </div>
-              )}
+              )} */}
 
               {/* Tertiary */}
-              {patient.tertiary_insurance && (
+              {/* {patient.tertiary_insurance && (
                 <div className="bg-gray-50 dark:bg-gray-700/50 rounded-lg p-2.5">
                   <div className="flex items-center justify-between mb-1">
                     <span className="text-[10px] font-bold text-gray-700 dark:text-gray-300 uppercase">
@@ -459,7 +459,7 @@ const PatientCard = ({
                 </div>
               )}
             </div>
-          </Section>
+          </Section> */}
 
           {/* Patient Documents Section */}
           <Section title="Patient Documents" icon={IoDocumentsOutline}>
@@ -530,6 +530,7 @@ const PatientCard = ({
           </Section>
 
           {/* Orders */}
+          {patient.has_approved_ivr && (
           <Section title="Orders" icon={FaShoppingCart}>
             <div className="bg-gray-50 dark:bg-gray-700/50 rounded-lg p-3">
               {patient.has_approved_ivr ? (
@@ -555,7 +556,7 @@ const PatientCard = ({
                 </div>
               )}
             </div>
-          </Section>
+          </Section>)}
 
           {/* Notes */}
           <Section title="Notes" icon={IoDocumentsOutline}>
