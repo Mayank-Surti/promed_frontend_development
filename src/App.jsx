@@ -83,7 +83,9 @@ function AppWrapper() {
   // 1. Dark Mode Initialization (remains the same)
   useEffect(() => {
     const savedMode = localStorage.getItem("darkMode");
-    const isDark = savedMode === "true";
+
+    const isDark = savedMode === null ? true : savedMode === "true";
+    
     setIsDarkMode(isDark);
 
     if (isDark) {
