@@ -303,10 +303,10 @@ const Login = () => {
               </motion.div>
             </motion.div>
 
-            {/* Security Badge */}
+            {/* Security Badge & EMR Notice */}
             <motion.div
               variants={itemVariants}
-              className="mt-8 text-center"
+              className="mt-8 flex flex-col items-center gap-3"
             >
               <div className="inline-flex items-center gap-2 px-4 py-2 bg-white/5 backdrop-blur-sm rounded-full border border-white/10">
                 <svg className="w-4 h-4 text-teal-400" fill="currentColor" viewBox="0 0 20 20">
@@ -314,6 +314,20 @@ const Login = () => {
                 </svg>
                 <span className="text-xs text-gray-400 font-medium">Secured by 256-bit encryption</span>
               </div>
+
+              <motion.div
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.6 }}
+                className="inline-flex items-center gap-2 px-4 py-2 bg-amber-500/10 border border-amber-500/20 rounded-lg"
+              >
+                <svg className="w-4 h-4 text-amber-400 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
+                </svg>
+                <p className="text-xs text-gray-300">
+                  <span className="font-semibold text-amber-400">EMR/EHR </span> integrations coming soon
+                </p>
+              </motion.div>
             </motion.div>
           </motion.div>
         </div>

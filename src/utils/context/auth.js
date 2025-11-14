@@ -117,59 +117,137 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
-  const login = async (email, password, method = "sms") => {
-    try {
-      const response = await axios.post(`${API_BASE_URL}/provider/token/`, {
-        email: email.trim(),
-        password,
-        method,
-      });
+  // const login = async (email, password, method = "sms") => {
+  //   try {
+  //     const response = await axios.post(`${API_BASE_URL}/provider/token/`, {
+  //       email: email.trim(),
+  //       password,
+  //       method,
+  //     });
 
-      const { access, refresh, mfa_required, session_id } = response.data;
+  //     const { access, refresh, mfa_required, session_id } = response.data;
 
-      // 1. Handle MFA requirement
-      if (mfa_required) {
-        localStorage.setItem("accessToken", access);
-        localStorage.setItem("session_id", session_id);
-        localStorage.setItem("mfa_method", method);
-        setIsMfaPending(true);
-        return { mfa_required: true, session_id, detail: response.data.detail };
-      }
+  //     // 1. Handle MFA requirement
+  //     if (mfa_required) {
+  //       localStorage.setItem("accessToken", access);
+  //       localStorage.setItem("session_id", session_id);
+  //       localStorage.setItem("mfa_method", method);
+  //       setIsMfaPending(true);
+  //       return { mfa_required: true, session_id, detail: response.data.detail };
+  //     }
 
-      // 2. Handle successful full login
+  //     // 2. Handle successful full login
+  //     localStorage.setItem("accessToken", access);
+  //     localStorage.setItem("refreshToken", refresh);
+  //     clearMfaState(); // ensure any lingering MFA state is gone
+
+  //     await fetchUserData(access); // Populate user state immediately
+  //     return { success: true };
+  //   } catch (error) {
+  //     const errorData = error.response?.data;
+
+  //     // 🔑 Handle BAA Required (403)
+  //     if (error.response?.status === 403 && errorData?.baa_required) {
+  //       toast.error("Mandatory BAA agreement required.");
+
+  //       localStorage.setItem("accessToken", errorData.access); // Temp token
+  //       sessionStorage.setItem("isBAARequired", "true"); // Flag for router
+
+  //       // Note: The backend should return enough data for the profile to function temporarily
+  //       setUser(errorData.user || { email: email.trim() });
+  //       setIsBAARequired(true);
+  //       clearMfaState();
+
+  //       return { baa_required: true, user: errorData.user };
+  //     }
+
+  //     // --- Standard Error Parsing ---
+  //     let errorMessage =
+  //       "Login failed. Please check your credentials and try again.";
+  //     // ... (Add your detailed error parsing logic here) ...
+
+  //     clearMfaState();
+  //     return { success: false, error: errorMessage };
+  //   }
+  // };
+
+const login = async (email, password, method = "sms") => {
+  try {
+    const response = await axios.post(`${API_BASE_URL}/provider/token/`, {
+      email: email.trim(),
+      password,
+      method,
+    });
+
+    const { access, refresh, mfa_required, session_id } = response.data;
+
+    // 1. Handle MFA requirement
+    if (mfa_required) {
       localStorage.setItem("accessToken", access);
-      localStorage.setItem("refreshToken", refresh);
-      clearMfaState(); // ensure any lingering MFA state is gone
-
-      await fetchUserData(access); // Populate user state immediately
-      return { success: true };
-    } catch (error) {
-      const errorData = error.response?.data;
-
-      // 🔑 Handle BAA Required (403)
-      if (error.response?.status === 403 && errorData?.baa_required) {
-        toast.error("Mandatory BAA agreement required.");
-
-        localStorage.setItem("accessToken", errorData.access); // Temp token
-        sessionStorage.setItem("isBAARequired", "true"); // Flag for router
-
-        // Note: The backend should return enough data for the profile to function temporarily
-        setUser(errorData.user || { email: email.trim() });
-        setIsBAARequired(true);
-        clearMfaState();
-
-        return { baa_required: true, user: errorData.user };
-      }
-
-      // --- Standard Error Parsing ---
-      let errorMessage =
-        "Login failed. Please check your credentials and try again.";
-      // ... (Add your detailed error parsing logic here) ...
-
-      clearMfaState();
-      return { success: false, error: errorMessage };
+      localStorage.setItem("session_id", session_id);
+      localStorage.setItem("mfa_method", method);
+      setIsMfaPending(true);
+      return { mfa_required: true, session_id, detail: response.data.detail };
     }
-  };
+
+    // 2. Handle successful full login
+    localStorage.setItem("accessToken", access);
+    localStorage.setItem("refreshToken", refresh);
+    clearMfaState(); // ensure any lingering MFA state is gone
+
+    await fetchUserData(access); // Populate user state immediately
+    return { success: true };
+  } catch (error) {
+    const errorData = error.response?.data;
+
+    // 🔑 Handle BAA Required (403)
+    if (error.response?.status === 403 && errorData?.baa_required) {
+      localStorage.setItem("accessToken", errorData.access); // Temp token
+      sessionStorage.setItem("isBAARequired", "true"); // Flag for router
+
+      setUser(errorData.user || { email: email.trim() });
+      setIsBAARequired(true);
+      clearMfaState();
+
+      return { 
+        baa_required: true, 
+        user: errorData.user,
+        error: "Mandatory BAA agreement required." 
+      };
+    }
+
+    // --- Extract Error Message from API Response ---
+    let errorMessage = "Login failed. Please check your credentials and try again.";
+    
+    if (errorData?.detail) {
+      // Handle if detail is an array
+      if (Array.isArray(errorData.detail)) {
+        errorMessage = errorData.detail.join(" ");
+      } 
+      // Handle if detail is a string
+      else if (typeof errorData.detail === "string") {
+        errorMessage = errorData.detail;
+      }
+    }
+    // Handle other error formats (non_field_errors, specific field errors, etc.)
+    else if (errorData?.non_field_errors) {
+      errorMessage = Array.isArray(errorData.non_field_errors) 
+        ? errorData.non_field_errors.join(" ")
+        : errorData.non_field_errors;
+    }
+    else if (errorData?.email || errorData?.password) {
+      const errors = [];
+      if (errorData.email) errors.push(...(Array.isArray(errorData.email) ? errorData.email : [errorData.email]));
+      if (errorData.password) errors.push(...(Array.isArray(errorData.password) ? errorData.password : [errorData.password]));
+      errorMessage = errors.join(" ");
+    }
+
+    // REMOVED toast.error() from here - let the component handle it
+
+    clearMfaState();
+    return { success: false, error: errorMessage };
+  }
+};
 
   const signBAA = async (baaFormData) => {
     try {

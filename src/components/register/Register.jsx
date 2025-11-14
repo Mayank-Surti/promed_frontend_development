@@ -42,6 +42,7 @@ const InputField = ({
   icon,
   error,
   helperText,
+  disabled,
   ...props
 }) => (
   <div>
@@ -59,6 +60,7 @@ const InputField = ({
         value={value}
         onChange={onChange}
         placeholder={placeholder}
+        disabled={disabled}
         className={`w-full ${
           icon ? "pl-12" : "pl-4"
         } pr-4 py-4 bg-white/5 border ${
@@ -67,7 +69,9 @@ const InputField = ({
           error ? "focus:ring-red-500/50" : "focus:ring-teal-500/50"
         } ${
           error ? "focus:border-red-500" : "focus:border-teal-500"
-        } transition-all duration-300`}
+        } transition-all duration-300 ${
+          disabled ? "opacity-50 cursor-not-allowed" : ""
+        }`}
         {...props}
       />
     </div>
@@ -98,6 +102,7 @@ const Register = () => {
     countryCode: "+1",
     password: "",
     password2: "",
+    zipCode: "",
     city: "",
     state: "",
     country: "",
@@ -108,6 +113,8 @@ const Register = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [errorMsg, setErrorMsg] = useState("");
   const [currentStep, setCurrentStep] = useState(1);
+  const [isLoadingZip, setIsLoadingZip] = useState(false);
+  const [zipError, setZipError] = useState("");
   const [fieldErrors, setFieldErrors] = useState({});
   const [isValidating, setIsValidating] = useState(false);
   const navigate = useNavigate();
@@ -157,6 +164,7 @@ const Register = () => {
     return (
       formData.facility.trim() !== "" &&
       formData.facilityPhoneNumber.trim() !== "" &&
+      formData.zipCode.trim() !== "" &&
       formData.city.trim() !== "" &&
       formData.state.trim() !== "" &&
       formData.country.trim() !== ""
@@ -170,6 +178,71 @@ const Register = () => {
     setFieldErrors((prev) => ({ ...prev, [field]: null }));
   }
 };
+
+  // Fetch city and state from ZIP code
+  const fetchLocationFromZip = async (zip) => {
+    // Only fetch if we have exactly 5 digits
+    if (zip.length !== 5) {
+      setZipError("");
+      return;
+    }
+
+    setIsLoadingZip(true);
+    setZipError("");
+
+    try {
+      const response = await fetch(`http://api.zippopotam.us/us/${zip}`);
+      
+      if (!response.ok) {
+        throw new Error("Invalid ZIP code");
+      }
+
+      const data = await response.json();
+      
+      if (data.places && data.places.length > 0) {
+        const place = data.places[0];
+        setFormData((prev) => ({
+          ...prev,
+          city: place["place name"],
+          state: place.state,
+          country: data.country,
+        }));
+        setZipError("");
+      }
+    } catch (error) {
+      setZipError("Invalid ZIP code or unable to fetch location");
+      setFormData((prev) => ({
+        ...prev,
+        city: "",
+        state: "",
+        country: "",
+      }));
+    } finally {
+      setIsLoadingZip(false);
+    }
+  };
+
+  // Handle ZIP code input
+  const handleZipChange = (e) => {
+    const value = e.target.value;
+    // Only allow digits and limit to 5 characters
+    const digitsOnly = value.replace(/\D/g, "").slice(0, 5);
+    handleChange("zipCode", digitsOnly);
+    
+    // Auto-fetch when 5 digits are entered
+    if (digitsOnly.length === 5) {
+      fetchLocationFromZip(digitsOnly);
+    } else {
+      // Clear city/state if ZIP is incomplete
+      setFormData((prev) => ({
+        ...prev,
+        city: "",
+        state: "",
+        country: "",
+      }));
+      setZipError("");
+    }
+  };
 
   // ✅ Handle NPI input - only allow digits
   const handleNPIChange = (e) => {
@@ -303,6 +376,7 @@ const handleNextStep = async () => {
       password: formData.password,
       password2: formData.password2,
       npi_number: formData.npiNumber,
+      zip_code: formData.zipCode,
       city: formData.city,
       state: formData.state,
       country: formData.country,
@@ -577,53 +651,49 @@ const handleNextStep = async () => {
                         placeholder="555-555-5555"
                         required
                       />
-                      <div className="grid grid-cols-2 gap-4">
+                      
+                      <InputField
+                        label="ZIP Code"
+                        type="text"
+                        value={formData.zipCode}
+                        onChange={handleZipChange}
+                        placeholder="46202"
+                        maxLength="5"
+                        error={!!zipError}
+                        helperText={
+                          isLoadingZip
+                            ? "🔍 Looking up location..."
+                            : zipError
+                            ? zipError
+                            : formData.zipCode && formData.zipCode.length === 5 && formData.city
+                            ? "✓ Location found!"
+                            : "Enter 5-digit ZIP code to auto-fill location"
+                        }
+                        required
+                      />
+
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <InputField
                           label="City"
                           type="text"
                           value={formData.city}
                           onChange={(e) => handleChange("city", e.target.value)}
-                          placeholder="Chicago"
+                          placeholder="City"
+                          disabled={isLoadingZip}
                           required
                         />
 
-                        <div>
-                          <label
-                            htmlFor="state-select"
-                            className="block text-sm font-semibold text-gray-300 mb-2"
-                          >
-                            State
-                          </label>
-                          <div className="relative group">
-                            <select
-                              id="state-select"
-                              value={formData.state}
-                              onChange={(e) =>
-                                handleChange("state", e.target.value)
-                              }
-                              className="w-full pl-4 pr-4 py-4 bg-white/5 border border-white/10 rounded-xl text-white focus:outline-none focus:ring-2 focus:ring-teal-500/50 focus:border-teal-500 transition-all duration-300"
-                              required
-                            >
-                              <option
-                                value=""
-                                disabled
-                                className="bg-slate-900 text-gray-500"
-                              >
-                                Select State
-                              </option>
-                              {states.map((state) => (
-                                <option
-                                  key={state}
-                                  value={state}
-                                  className="bg-slate-900 text-white"
-                                >
-                                  {state}
-                                </option>
-                              ))}
-                            </select>
-                          </div>
-                        </div>
+                        <InputField
+                          label="State"
+                          type="text"
+                          value={formData.state}
+                          onChange={(e) => handleChange("state", e.target.value)}
+                          placeholder="State"
+                          disabled={isLoadingZip}
+                          required
+                        />
                       </div>
+                      
                       <InputField
                         label="Country"
                         type="text"
@@ -632,6 +702,7 @@ const handleNextStep = async () => {
                           handleChange("country", e.target.value)
                         }
                         placeholder="United States"
+                        disabled={isLoadingZip}
                         required
                       />
                     </motion.div>
@@ -793,6 +864,23 @@ const handleNextStep = async () => {
                   </Link>
                 </p>
               </div>
+
+              {/* EMR/EHR Notice */}
+              <motion.div
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.6 }}
+                className="mt-4 flex justify-center"
+              >
+                <div className="inline-flex items-center gap-2 px-4 py-2 bg-amber-500/10 border border-amber-500/20 rounded-lg">
+                  <svg className="w-4 h-4 text-amber-400 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
+                  </svg>
+                  <p className="text-xs text-gray-300">
+                    <span className="font-semibold text-amber-400">EMR/EHR </span> integrations coming soon
+                  </p>
+                </div>
+              </motion.div>
             </motion.div>
           </motion.div>
         </div>
