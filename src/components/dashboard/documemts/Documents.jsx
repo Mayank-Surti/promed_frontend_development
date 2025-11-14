@@ -233,7 +233,7 @@ const Documents = () => {
 
   // --- JSX Render ---
   return (
-    <div className="max-w-3xl mx-auto mt-10 p-6 bg-white dark:bg-gray-900 rounded-lg shadow-md">
+    <div className="max-w-3xl mx-auto mt-10 p-6 bg-white dark:bg-gray-900 rounded-lg shadow-lg">
       <h2 className="text-2xl font-semibold text-gray-800 dark:text-gray-100 mb-7">
         Provider Onboarding
       </h2>

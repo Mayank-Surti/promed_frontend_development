@@ -76,7 +76,8 @@ const Dashboard = () => {
       {/* ✅ ADD TOUR COMPONENT */}
       <DashboardTour />
       
-      <div className="flex-1 bg-white dark:bg-gray-900 pt-24">
+      <div className="flex-1 bg-gradient-to-t from-white via-teal-100 to-white 
+                    dark:from-gray-900 dark:via-teal-950 dark:to-gray-900 pt-24">
         
         {/* ✅ ADD data-tour ATTRIBUTE */}
         <div className="px-4 sm:px-6 ml-11 font-bold mb-6" data-tour="chat-button">
