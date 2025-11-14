@@ -127,6 +127,9 @@ const Register = () => {
   const hasSpecialChars =
     (formData.password.match(/[^A-Za-z0-9]/g) || []).length >= 1;
 
+  
+  const showPasswordRequirements = formData.password.length > 0;
+  
   const passwordRequirements = [
     { met: hasMinLength, text: "Minimum 8 characters" },
     { met: hasUppercase, text: "At least one uppercase letter" },
@@ -318,6 +321,7 @@ const validateStep1 = async () => {
 
 // ✅ Handle step progression with validation
 const handleNextStep = async () => {
+  setErrorMsg(""); 
   if (currentStep === 1) {
     const isValid = await validateStep1();
     if (isValid) {
@@ -727,8 +731,10 @@ const handleNextStep = async () => {
                           <input
                             type={showPassword ? "text" : "password"}
                             value={formData.password}
-                            onChange={(e) =>
+                            onChange={(e) =>{
                               handleChange("password", e.target.value)
+                              setErrorMsg("");
+                            }
                             }
                             placeholder="Create a strong password"
                             className="w-full px-4 pr-12 py-4 bg-white/5 border border-white/10 rounded-xl text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-teal-500/50"
@@ -746,6 +752,7 @@ const handleNextStep = async () => {
                             )}
                           </button>
                         </div>
+                        {showPasswordRequirements && (
                         <div className="mt-3 space-y-2">
                           {passwordRequirements.map((req, idx) => (
                             <motion.div
@@ -770,14 +777,16 @@ const handleNextStep = async () => {
                             </motion.div>
                           ))}
                         </div>
+                        )}
                       </div>
                       <InputField
                         label="Confirm Password"
                         type={showPassword ? "text" : "password"}
                         value={formData.password2}
-                        onChange={(e) =>
-                          handleChange("password2", e.target.value)
-                        }
+                        onChange={(e) => {
+                          handleChange("password2", e.target.value);
+                          setErrorMsg("");
+                        }}
                         placeholder="Repeat your password"
                         required
                       />
@@ -786,7 +795,8 @@ const handleNextStep = async () => {
                 </AnimatePresence>
 
                 <AnimatePresence>
-                  {errorMsg && (
+                  
+                  {errorMsg && currentStep != 3 && (
                     <motion.div
                       initial={{ opacity: 0, height: 0 }}
                       animate={{ opacity: 1, height: "auto" }}
@@ -796,13 +806,28 @@ const handleNextStep = async () => {
                       <p className="text-red-400 text-sm">{errorMsg}</p>
                     </motion.div>
                   )}
+                  {showPasswordRequirements && errorMsg && currentStep == 3 && (
+                    <motion.div
+                      initial={{ opacity: 0, height: 0 }}
+                      animate={{ opacity: 1, height: "auto" }}
+                      exit={{ opacity: 0, height: 0 }}
+                      className="mt-4 bg-red-500/10 border border-red-500/20 rounded-xl p-4"
+                    >
+                      <p className="text-red-400 text-sm">{errorMsg}</p>
+                    </motion.div>
+                  )}
+                  
+
                 </AnimatePresence>
 
                 <div className="flex gap-4 mt-8">
                   {currentStep > 1 && (
                     <motion.button
                       type="button"
-                      onClick={() => setCurrentStep(currentStep - 1)}
+                      onClick={() => {
+                        setErrorMsg("");
+                        setCurrentStep(currentStep - 1);
+                      }}
                       className="flex-1 py-4 bg-white/5 hover:bg-white/10 text-white font-semibold rounded-xl border border-white/10 transition-all"
                       whileHover={{ scale: 1.02 }}
                       whileTap={{ scale: 0.98 }}

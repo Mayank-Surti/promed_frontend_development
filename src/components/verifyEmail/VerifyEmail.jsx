@@ -1,6 +1,6 @@
 // src/components/verify-email/VerifyEmail.js
 
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { useParams, useNavigate } from "react-router-dom"; // ⬅️ Import useNavigate
 import axios from "axios";
 import { API_BASE_URL } from "../../utils/constants";
@@ -10,9 +10,11 @@ const VerifyEmail = () => {
   const { token } = useParams();
   const [verificationStatus, setVerificationStatus] = useState("verifying");
   const navigate = useNavigate(); // ⬅️ Initialize navigate
-
+  const hasVerified = useRef(false);
   useEffect(() => {
     const verifyToken = async () => {
+      if (hasVerified.current) return;
+      hasVerified.current = true;
       try {
         // Make the GET request to your backend's verification endpoint
         await axios.get(`${API_BASE_URL}/provider/verify-email/${token}/`);
