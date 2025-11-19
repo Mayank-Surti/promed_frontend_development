@@ -243,7 +243,7 @@ const Navbar = ({ isDarkMode, setIsDarkMode }) => {
         <div className="hidden lg:flex items-center justify-center flex-1">
           <ul className="flex items-center space-x-8 xl:space-x-10">
             {[
-              { to: "/", label: "Home" },
+         
               // ✅ FIX: Use simple isAuthenticated check, as loading is handled in parent
               ...(isAuthenticated
                 ? [{ to: "/dashboard/", label: "Dashboard" }]

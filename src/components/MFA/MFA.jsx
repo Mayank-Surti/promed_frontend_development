@@ -183,7 +183,7 @@ const MFA = () => {
                 Verify Your Identity
               </h2>
               <p className="text-gray-400 text-lg">
-                Enter the 6-digit code sent to your device
+                Enter the 6-digit code sent to your email
               </p>
             </motion.div>
 
