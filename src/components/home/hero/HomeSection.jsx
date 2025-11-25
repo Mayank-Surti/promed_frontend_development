@@ -126,14 +126,7 @@ const HeroSection = () => {
 
       {/* Video Banner */}
       <div className="pt-20">
-        <video
-          src={promed_video}
-          autoPlay
-          loop
-          muted
-          playsInline
-          className=""
-        />
+        <video src={promed_video} autoPlay loop muted playsInline />
       </div>
 
       <section className="relative flex items-center justify-center overflow-hidden px-4 py-28 lg:py-24">
@@ -143,13 +136,11 @@ const HeroSection = () => {
             dark:bg-gradient-to-br dark:from-transparent dark:via-teal-400/10 dark:to-teal-600/30
             bg-gradient-to-br from-teal-300 via-teal-100 to-white"
           initial="hidden"
-          animate="visible"
+          whileInView="visible"
           variants={backgroundVariants}
         />
 
-        {/* Floating particles */}
         <FloatingParticles />
-
 
         {/* Main content */}
         <div className="relative z-10 flex flex-col items-center lg:flex-row lg:justify-center lg:gap-16">
@@ -158,7 +149,7 @@ const HeroSection = () => {
           <motion.div
             className="flex flex-col items-center text-center lg:text-center relative z-10"
             initial="hidden"
-            animate="visible"
+            whileInView="visible"
             variants={{
               hidden: { opacity: 1 },
               visible: { opacity: 1, transition: { staggerChildren: 0.15 } }
@@ -209,7 +200,7 @@ const HeroSection = () => {
           <motion.div
             className="block relative pt-10"
             initial="hidden"
-            animate="visible"
+            whileInView="visible"
             variants={imageVariants}
           >
             <div className="relative">
