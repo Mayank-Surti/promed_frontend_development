@@ -4,6 +4,7 @@ import { IoLocationOutline, IoCallOutline, IoMailOutline, IoHelpCircleOutline } 
 import toast from 'react-hot-toast'; // Required for toast messages
 import axios from "axios";             // Required for API calls
 import { states } from '../../utils/data/index';
+import FloatingParticles from "../home/FloatingParticles"
 
 const containerVariants = {
   hidden: { opacity: 0 },
@@ -104,6 +105,9 @@ const Contact = () => {
 
   return (
     <div className="bg-gray-50 dark:bg-gray-900 transition-colors duration-500 min-h-screen pt-20 pb-32">
+
+      <FloatingParticles />
+
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl">
         {/* Header (No change) */}
         <motion.header

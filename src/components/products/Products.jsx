@@ -3,6 +3,7 @@ import { Shield, Package, CheckCircle, Phone, Mail, MapPin, Zap, ArrowRight } fr
 import { motion } from "framer-motion";
 import toast from 'react-hot-toast'; 
 import axios from "axios";
+import FloatingParticles from "../home/FloatingParticles"
 
 // Import states array - make sure this path is correct for your project
 // import { states } from "../../utils/data";
@@ -172,6 +173,9 @@ const Products = () => {
 
   return (
     <div className="bg-white dark:bg-gray-900 text-gray-900 dark:text-white overflow-hidden transition-colors duration-500 min-h-screen">
+      
+      <FloatingParticles />
+      
       {/* Hero Header Section */}
       <motion.header
         className="bg-white dark:bg-gray-900 text-gray-800 dark:text-white pt-32 pb-16 transition-colors duration-500"

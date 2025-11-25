@@ -3,6 +3,7 @@ import { Modal, Box } from "@mui/material";
 import { motion, AnimatePresence } from "framer-motion"; // Make sure AnimatePresence is available if using modal exit transition
 import { IoMailOutline, IoCallOutline } from "react-icons/io5";
 import { states, about_approach_data, about_team } from "../../utils/data";
+import FloatingParticles from "../home/FloatingParticles"
 import about_bg_img from '../../assets/images/about_bg_img.jpg';
 
 import toast from 'react-hot-toast'; 
@@ -153,6 +154,8 @@ const About = () => {
   return (
     <div className={darkModeClass}>
       <div className="bg-white dark:bg-gray-900 transition-colors duration-500 min-h-screen">
+        
+        <FloatingParticles />
         
         {/* ... (Hero Section content remains the same) ... */}
         <motion.header

@@ -1,7 +1,8 @@
 import React, { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion"; // <-- Import AnimatePresence
-import wound_care_home_img from '../../../assets/images/home_bg_img_2.jpg'
+import woundcare_img from '../../../assets/images/main-promed-square.jpg'
 import ContactModal from "./ContactModal";
+import FloatingParticles from "../FloatingParticles"
 import toast from 'react-hot-toast'; 
 import axios from "axios"; 
 
@@ -70,79 +71,145 @@ const HeroSection = () => {
       toast.error("Failed to send message. Please try again.");
     }
   };
-  // Framer Motion Variants for Staggered Entrance (rest of the component logic)
-  const containerVariants = {
+
+  // Framer Motion Variants
+  const backgroundVariants = {
     hidden: { opacity: 0 },
     visible: {
       opacity: 1,
-      transition: {
-        staggerChildren: 0.2, 
-        delayChildren: 0.3,   
-      },
-    },
+      transition: { duration: 0.8 }
+    }
   };
-
+  const imageVariants = {
+    hidden: {
+      opacity: 0,
+      x: 50
+    },
+    visible: {
+      opacity: 1,
+      x: 0,
+      transition: { duration: 0.8, delay: 0.3 }
+    }
+  };
+  const slideFromLeftVariants = {
+    hidden: { opacity: 0, x: "-100vw" },
+    visible: {
+      opacity: 1,
+      x: 0,
+      transition: { duration: 0.65, ease: "easeOut" }
+    }
+  }
+  const slideFromTopVariants = {
+    hidden: { opacity: 0, y: "-100vw" },
+    visible: {
+      opacity: 1,
+      y: 0,
+      transition: { duration: 0.65, ease: "easeOut" }
+    }
+  }
+  const subtitleVariants = {
+    hidden: { opacity: 0, y: 80 },
+    visible: { opacity: 1, y: 0, transition: { duration: 0.6, ease: "easeOut", delay: 0.1 } }
+  }
   const itemVariants = {
     hidden: { opacity: 0, y: 30 },
-    visible: { 
-      opacity: 1, 
-      y: 0, 
-      transition: { 
-        type: "spring", 
-        stiffness: 150, 
-        damping: 20 
-      } 
+    visible: {
+      opacity: 1,
+      y: 0,
+      transition: { type: "spring", stiffness: 150, damping: 20 }
     },
   };
 
   return (
-    <div className="bg-gray-100 dark:bg-gray-900 transition-colors duration-500">
-      <section className="relative px-4 sm:px-8 lg:px-16 xl:px-40 2xl:px-64 overflow-hidden flex items-center min-h-screen"> 
-        <motion.div 
-          className="absolute inset-0 z-0"
-          initial={{ scale: 1.05 }}
-          animate={{ scale: 1 }}
-          transition={{ duration: 1.5, ease: "easeOut" }}
-        >
-          <img
-            src={wound_care_home_img}
-            alt="Medical professionals working on wound care"
-            className="w-full h-full object-cover object-right" 
-          />
-        </motion.div>
-        <div className="absolute inset-0 z-0 bg-gray-900/20 dark:bg-gray-900/60"></div>
-        <motion.div 
-          className="lg:w-3/4 xl:w-2/4 relative z-10 py-16" 
+    <div className="bg-gray-100 dark:bg-gray-900 transition-colors duration-500 mt-20 lg:mt-0">
+      <section className="relative min-h-screen flex items-center justify-center overflow-hidden px-4 lg:pt-10 pt-4">
+        {/* Background gradient */}
+        <motion.div
+          className="absolute inset-0 
+            dark:bg-gradient-to-br dark:from-transparent dark:via-teal-400/10 dark:to-teal-600/30
+            bg-gradient-to-br from-teal-300 via-teal-100 to-white"
           initial="hidden"
           animate="visible"
-          variants={containerVariants}
-        >
-          <div className="bg-white/10 p-6 rounded-xl backdrop-blur-sm shadow-2xl"> 
-            <motion.h1 
-              className="text-white text-2xl sm:text-3xl md:text-4xl xl:text-5xl font-bold leading-tight drop-shadow-lg"
-              variants={itemVariants}
+          variants={backgroundVariants}
+        />
+
+        {/* Floating particles */}
+        <FloatingParticles />
+
+
+        {/* Main content */}
+        <div className="relative z-10 flex flex-col items-center lg:flex-row lg:justify-center lg:gap-16">
+
+          {/* Text column */}
+          <motion.div
+            className="flex flex-col items-center text-center lg:text-center relative z-10"
+            initial="hidden"
+            animate="visible"
+            variants={{
+              hidden: { opacity: 1 },
+              visible: { opacity: 1, transition: { staggerChildren: 0.15 } }
+            }}
+          >
+            {/* Title row */}
+            <div className="flex items-center justify-center gap-4 flex-wrap">
+
+              {/* "ProMed Health" sliding from left */}
+              <motion.span
+                className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-extrabold text-gray-700 dark:text-white whitespace-nowrap"
+                variants={slideFromLeftVariants}
+              >
+                ProMed Health
+              </motion.span>
+
+              {/* "Plus" sliding from top */}
+              <motion.span
+                className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-extrabold text-teal-500 dark:text-teal-400 whitespace-nowrap"
+                variants={slideFromTopVariants}
+              >
+                Plus
+              </motion.span>
+            </div>
+
+            {/* Subtitle */}
+            <motion.p
+              className="text-gray-600 dark:text-gray-300 text-lg sm:text-xl md:text-2xl mt-8 max-w-lg"
+              variants={subtitleVariants}
             >
-              Promed Health <span className="text-teal-400">Plus</span>
-            </motion.h1>
-            
-            <motion.p 
-              className="text-gray-200 text-lg md:text-xl leading-snug mt-2 ML-2 max-w-lg drop-shadow-md"
-              variants={itemVariants}
-            >
-              {''}Built For The Next Generation Of Care...
+              Advancing Wound Care for a New Generation
             </motion.p>
-            
+              
+            {/* Contact button */}
             <motion.button
               onClick={handleOpen}
-              className="px-10 py-4 bg-teal-600 text-white rounded-full inline-block mt-8 font-bold text-sm uppercase tracking-wider hover:bg-teal-700 transition-colors duration-300 shadow-xl"
+              className="px-10 py-4 bg-teal-500 text-white rounded-full inline-block mt-8 font-bold text-sm uppercase tracking-wider hover:bg-teal-700 transition-colors duration-300"
               variants={itemVariants}
               whileHover={{ scale: 1.05, boxShadow: "0 15px 25px rgba(0, 0, 0, 0.4)" }}
               whileTap={{ scale: 0.95 }}
             >
               Contact Us
             </motion.button>
-          </div>
-        </motion.div>
+            
+          </motion.div>
+
+          {/* Image column (next to title) */}
+          <motion.div
+            className="block relative pt-10"
+            initial="hidden"
+            animate="visible"
+            variants={imageVariants}
+          >
+            <div className="relative">
+              <div className="absolute inset-0 bg-teal-400/20 blur-3xl rounded-full" />
+              
+              <img
+                src={woundcare_img}
+                className="relative z-10 w-[30rem] lg:w-[35rem] dark:opacity-80 object-contain drop-shadow-2xl rounded-3xl mb-4 lg:mb-0"
+                alt="woundcare square"
+              />
+            </div>
+          </motion.div>
+            
+        </div>
       </section>
       
       <AnimatePresence>
