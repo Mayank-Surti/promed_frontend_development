@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion"; // <-- Import AnimatePresence
-import woundcare_img_1 from '../../../assets/images/main-promed-square.jpg'
+import woundcare_img from '../../../assets/images/main-promed-square.jpg'
 import ContactModal from "./ContactModal";
 import toast from 'react-hot-toast'; 
 import axios from "axios"; 
@@ -222,8 +222,9 @@ const HeroSection = () => {
               <div className="absolute inset-0 bg-teal-400/20 blur-3xl rounded-full" />
               
               <img
-                src={woundcare_img_1}
+                src={woundcare_img}
                 className="relative z-10 w-[30rem] lg:w-[35rem] dark:opacity-80 object-contain drop-shadow-2xl rounded-3xl mb-4 lg:mb-0"
+                alt="woundcare square"
               />
             </div>
           </motion.div>
