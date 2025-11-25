@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef, useContext } from "react";
 import { AuthContext } from "../../utils/context/auth";
 import { useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
-import mfa_bg_img_2 from '../../assets/images/mfa_bg_img.jpeg';
+import mfa_bg_img_2 from '../../assets/images/mfa_img.jpg';
 
 const MFA = () => {
   const { verifyCode, user } = useContext(AuthContext);

@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion"; // <-- Import AnimatePresence
 import woundcare_img from '../../../assets/images/main-promed-square.jpg'
+import promed_video from '../../../assets/videos/homepage-video.mp4'
 import ContactModal from "./ContactModal";
 import FloatingParticles from "../FloatingParticles"
 import toast from 'react-hot-toast'; 
@@ -121,8 +122,21 @@ const HeroSection = () => {
   };
 
   return (
-    <div className="bg-gray-100 dark:bg-gray-900 transition-colors duration-500 mt-20 lg:mt-0">
-      <section className="relative min-h-screen flex items-center justify-center overflow-hidden px-4 lg:pt-10 pt-4">
+    <div className="bg-gray-100 dark:bg-gray-900 transition-colors duration-500">
+
+      {/* Video Banner */}
+      <div className="pt-20">
+        <video
+          src={promed_video}
+          autoPlay
+          loop
+          muted
+          playsInline
+          className=""
+        />
+      </div>
+
+      <section className="relative flex items-center justify-center overflow-hidden px-4 py-28 lg:py-24">
         {/* Background gradient */}
         <motion.div
           className="absolute inset-0 
@@ -221,7 +235,7 @@ const HeroSection = () => {
               handleChange={handleChange} 
               handleSubmit={handleSubmit}
             />
-        )}
+        )}  
       </AnimatePresence>
     </div>
   );

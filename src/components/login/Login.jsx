@@ -4,7 +4,7 @@ import { useNavigate, Link } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { IoArrowBack, IoMail, IoLockClosed, IoEyeOutline, IoEyeOffOutline } from "react-icons/io5";
 import toast from "react-hot-toast";
-import login_bg_img_2 from "../../assets/images/login.jpg";
+import login_bg_img_2 from "../../assets/images/login_doctor_img.jpg";
 
 const Login = () => {
   const { login } = useContext(AuthContext);

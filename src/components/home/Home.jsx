@@ -8,7 +8,7 @@ const Home = () => {
     //     {/* <Hero /> */}
     //     <HeroSection />
     // </div>
-    <div className="w-full h-screen">
+    <div className="w-full min-h-screen">
       <HeroSection />
     </div>
   );

@@ -82,7 +82,7 @@ const Dashboard = () => {
     <FilterProvider>
       {/* ✅ ADD TOUR COMPONENT */}
       
-      <div className="flex-1 relative min-h-screen pt-24">
+      <div className="flex-1 relative min-h-screen pt-24 pb-10 bg-black">
 
         {/* ✅ Video Background */}
         <video
